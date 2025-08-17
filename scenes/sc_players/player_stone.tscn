@@ -1,0 +1,91 @@
+[gd_scene load_steps=10 format=3 uid="uid://17slkle445pu"]
+
+[ext_resource type="Texture2D" uid="uid://pcy2557m57uk" path="res://assets/sprites/sp_players/stoneP_spriteSheet.png" id="1_rqgbp"]
+[ext_resource type="Script" uid="uid://ctedbi0l3olts" path="res://scripts/scr_players/player_stone.gd" id="1_wu482"]
+[ext_resource type="Script" uid="uid://d0d12qjf8tdk4" path="res://scripts/scr_players/player_stone_fsm.gd" id="2_xa8v4"]
+[ext_resource type="PackedScene" uid="uid://djftvosn3adoy" path="res://assets/camera_screen_shake/camera_2d_screen_shake.tscn" id="4_35tu6"]
+
+[sub_resource type="Animation" id="Animation_wu482"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_rqgbp"]
+resource_name = "idle"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_xa8v4"]
+resource_name = "run"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 7, 8, 9, 10, 11]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_35tu6"]
+_data = {
+&"RESET": SubResource("Animation_wu482"),
+&"idle": SubResource("Animation_rqgbp"),
+&"run": SubResource("Animation_xa8v4")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p6xi7"]
+radius = 3.0
+height = 12.0
+
+[node name="Player_stone" type="CharacterBody2D"]
+script = ExtResource("1_wu482")
+
+[node name="PlayerFSM" type="Node" parent="."]
+script = ExtResource("2_xa8v4")
+
+[node name="MainSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_rqgbp")
+hframes = 6
+vframes = 6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_35tu6")
+}
+
+[node name="MainCollision" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2)
+shape = SubResource("CapsuleShape2D_p6xi7")
+
+[node name="Camera2D_ScreenShake" parent="." instance=ExtResource("4_35tu6")]
+zoom = Vector2(2, 2)
